@@ -1,0 +1,31 @@
+ls:
+  .vscode:
+    .*: 'exists:0'
+    .json: 'regex:(settings|launch|tasks|extensions|keybindings)'
+
+  assets:
+    .*: 'exists:0'
+    .png: 'kebab-case'
+    .jpg: 'kebab-case'
+    .jpeg: 'kebab-case'
+    .svg: 'kebab-case'
+    .ico: 'kebab-case'
+
+  docs:
+    .*: 'exists:0'
+    .md: 'kebab-case'
+
+  language-configuration:
+    .*: 'exists:0'
+    .language-configuration.json: 'kebab-case'
+
+  scripts:
+    .js: 'kebab-case'
+
+  syntaxes:
+    .*: 'exists:0'
+    .tmLanguage.json: 'kebab-case'
+
+ignore:
+  - 'node_modules'
+  - '.git'

@@ -1,0 +1,7 @@
+[tool.commitizen]
+name = 'cz_customize'
+tag_format = 'v$version'
+version_scheme = 'semver2'
+version_provider = 'scm'
+update_changelog_on_bump = true
+major_version_zero = true
