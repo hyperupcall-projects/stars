@@ -1,12 +1,10 @@
 # shellcheck shell=bash
 
 task.run() {
-	go run .
-}
-
-task.run-python() {
 	local token="$GITHUB_TOKEN"
 	[ -z "$token" ] && token="$(<.env)"
+	local username=hyperupcall
 
-	pipx run starred --username hyperupcall --token "$token" --sort "$@" > './README.md'
+	time uv run starred --username "$username" --token "$token" --sort "$@" > './README.md'
+	time uv run starred --username "$username" --token "$token" --sort --topics "$@" > './README-topics.md'
 }

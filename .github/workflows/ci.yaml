@@ -1,23 +1,38 @@
-name: 'ci'
-
+name: 'Update Stars'
 on:
-  push:
-    branches:
-      - main
+  workflow_dispatch:
   schedule:
-    - cron: '0 13 * * 0,3'
-
+  - cron: 30 0 * * *
 jobs:
-  star-generator:
-    runs-on: ubuntu-22.04
+  update-stars:
+    name: 'Update Stars'
+    runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
-      - name: 'Run Python Star Generator'
-        env:
-          GITHUB_TOKEN: '${{ secrets.GITHUB_TOKEN }}'
-        run: ./bake run-python
-      - uses: ad-m/github-push-action@master
-        with:
-          github_token: '${{ secrets.GITHUB_TOKEN }}'
-          branch: '${{ github.ref }}'
-       
+    - uses: actions/checkout@v5
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.14'
+    - name: Install dependencies
+      run: pipx install uv
+    - name: Update README
+      run: ./bake run
+    - uses: 'crazy-max/ghaction-import-gpg@2dc316deee8e90f13e1a351ab510b4d5bc0c82cd' # v7.0.0
+      with:
+        gpg_private_key: '${{ secrets.GPG_PRIVATE_KEY }}'
+        passphrase: '${{ secrets.GPG_PRIVATE_KEY_PASSWORD }}'
+    - name: 'Commit'
+      permissions:
+        contents: 'write'
+      run: |
+        _date=$(date '+%Y-%m-%d')
+        git add config/ublacklist-compiled.txt
+        git add config/ublockorigin-compiled.txt
+        git \
+          -c user.name='Otternaut' \
+          -c user.email='99463792+otternaut-bot@users.noreply.github.com' \
+          commit \
+          -m "$_date" \
+          --author='Otternaut <99463792+otternaut-bot@users.noreply.github.com>' \
+          -S0xFB6C155AFD89739C
+        git push

@@ -1,4 +1,3 @@
 [rules]
-'remote-url/license/must-have-license-file' = 'off'
-'remote-url/license/must-have-correct-contents' = 'off'
-
+'remote-url/license/must-have-license-file' = "off"
+'remote-url/license/must-have-correct-contents' = "off"
