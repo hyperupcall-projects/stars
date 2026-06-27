@@ -7,6 +7,8 @@ jobs:
   update-stars:
     name: 'Update Stars'
     runs-on: ubuntu-latest
+    permissions:
+      contents: 'write'
     steps:
     - uses: actions/checkout@v5
     - name: Set up Python
@@ -22,8 +24,6 @@ jobs:
         gpg_private_key: '${{ secrets.GPG_PRIVATE_KEY }}'
         passphrase: '${{ secrets.GPG_PRIVATE_KEY_PASSWORD }}'
     - name: 'Commit'
-      permissions:
-        contents: 'write'
       run: |
         _date=$(date '+%Y-%m-%d')
         git add config/ublacklist-compiled.txt
