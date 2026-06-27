@@ -3,7 +3,7 @@ name: 'Deploy Website'
 on:
   workflow_dispatch:
   schedule:
-  - cron: '30 0 * * 2'
+  - cron: '30 0 2 * *' # Every second day of the month.
 
 concurrency:
   group: '${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}'
