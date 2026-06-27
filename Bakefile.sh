@@ -5,6 +5,6 @@ task.run() {
 	[ -z "$token" ] && token="$(<.env)"
 	local username=hyperupcall
 
-	time uv run starred --username "$username" --token "$token" --sort "$@" > './README.md'
-	time uv run starred --username "$username" --token "$token" --sort --topics "$@" > './README-topics.md'
+	uv run starred --username "$username" --token "$token" --sort "$@" > './README.md'
+	uv run starred --username "$username" --token "$token" --sort --topic "$@" > './README-topics.md'
 }
