@@ -29,8 +29,7 @@ jobs:
     - name: 'Commit'
       run: |
         _date=$(date '+%Y-%m-%d')
-        git add config/ublacklist-compiled.txt
-        git add config/ublockorigin-compiled.txt
+        git add .
         git \
           -c user.name='Otternaut' \
           -c user.email='99463792+otternaut-bot@users.noreply.github.com' \
