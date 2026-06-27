@@ -7,10 +7,12 @@ task.run() {
 
 	uv run starred --username "$username" --token "$token" --sort "$@" > './by-language.md'
 	uv run starred --username "$username" --token "$token" --sort --topic "$@" > './by-topics.md'
-	task.copy-files
+	task.process-files
 }
 
-task.copy-files() {
-	cp ./by-*.md ./docs/content
-	cp README-docs.md ./docs/content/_index.md
+task.process-files() {
+	mkdir -p ./website/content/pages
+	sed -i "s/^# Awesome Stars.*/# Edwin's Stars/" ./by-*.md
+	sed -i "s/curated list/list/" ./by-*.md
+	cp ./by-*.md ./website/content/pages
 }

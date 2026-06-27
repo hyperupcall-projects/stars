@@ -1,0 +1,14 @@
+{{- $url := .Destination -}}
+{{- $text := .Text -}}
+{{- if hasPrefix $url "/" -}}
+  {{- $path := strings.TrimPrefix "/" $url -}}
+  {{- $isDir := or (hasSuffix $path "/") (not (strings.Contains $path ".")) -}}
+  {{- if $isDir -}}
+    {{- $url = printf "https://github.com/hyperupcall/dotfiles/tree/trunk/%s" $path -}}
+  {{- else -}}
+    {{- $url = printf "https://github.com/hyperupcall/dotfiles/blob/trunk/%s" $path -}}
+  {{- end -}}
+<a href="{{ $url | safeURL }}" target="_blank" rel="noopener">{{ $text | safeHTML }}</a>
+{{- else -}}
+<a href="{{ $url | safeURL }}">{{ $text | safeHTML }}</a>
+{{- end -}}
