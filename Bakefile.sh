@@ -11,6 +11,6 @@ task.run() {
 }
 
 task.copy-files() {
-	cp ./by-*.md ./docs
-	cp README-docs.md ./docs/index.md
+	cp ./by-*.md ./docs/content
+	cp README-docs.md ./docs/content/_index.md
 }

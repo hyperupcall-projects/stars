@@ -23,28 +23,23 @@ jobs:
 
       - run: ./bake copy-files
 
-      - name: 'Setup Ruby'
-        uses: 'ruby/setup-ruby@9eb537ca036ebaed86729dcb9309076e4c5c3b74' # v1.314.0
-        with:
-          ruby-version: '3.3'
-          bundler-cache: true
-          working-directory: './docs'
-
       - name: 'Setup Pages'
         id: pages
         uses: 'actions/configure-pages@45bfe0192ca1faeb007ade9deae92b16b8254a0d' # v6.0.0
 
-      - name: 'Build with Jekyll'
-        run: bundle exec jekyll build --baseurl "${STEPS_PAGES_OUTPUTS_BASE_PATH}"
-        working-directory: './docs'
-        env:
-          JEKYLL_ENV: production
-          STEPS_PAGES_OUTPUTS_BASE_PATH: ${{ steps.pages.outputs.base_path }}
+      - name: "Install Hugo"
+        run: |
+          set -e
+          version='0.163.3'
+          curl -sSLf -o '${{ runner.temp }}/hugo.deb' "https://github.com/gohugoio/hugo/releases/download/v${version}/hugo_extended_${version}_linux-amd64.deb"
+          sudo dpkg -i '${{ runner.temp }}/hugo.deb'
+      - run: "cd docs && hugo mod get"
+      - run: "cd docs && hugo --minify"
 
       - name: 'Upload artifact'
         uses: 'actions/upload-pages-artifact@fc324d3547104276b827a68afc52ff2a11cc49c9' # v5.0.0
         with:
-          path: './docs/_site'
+          path: './docs/public'
 
   deploy:
     permissions:
