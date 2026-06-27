@@ -5,6 +5,7 @@ on:
   - cron: 30 0 * * *
 jobs:
   update-stars:
+    environment: 'otternaut'
     name: 'Update Stars'
     runs-on: ubuntu-latest
     permissions:
