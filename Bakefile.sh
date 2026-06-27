@@ -7,4 +7,6 @@ task.run() {
 
 	uv run starred --username "$username" --token "$token" --sort "$@" > './by-language.md'
 	uv run starred --username "$username" --token "$token" --sort --topic "$@" > './by-topics.md'
+	cp ./by-*.md ./docs
+	cp README-docs.md ./docs/index.md
 }

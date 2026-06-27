@@ -1,0 +1,24 @@
+title: 'stars'
+description: "List of Edwin's stars."
+baseurl: ''
+url: ''
+
+markdown: kramdown
+theme: minima
+permalink: /:basename:output_ext
+
+plugins:
+- jekyll-feed
+- jekyll-seo-tag
+- jekyll-relative-links
+- jekyll-optional-front-matter
+
+kramdown:
+  input: GFM
+  syntax_highlighter: rouge
+
+exclude:
+- Gemfile
+- Gemfile.lock
+- vendor/
+- .bundle/
