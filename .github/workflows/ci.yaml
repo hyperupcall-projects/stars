@@ -20,6 +20,8 @@ jobs:
       contents: 'write'
     steps:
     - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+      with:
+        persist-credentials: false
     - uses: actions/setup-python@ece7cb06caefa5fff74198d8649806c4678c61a1 # v6.3.0
       with:
         python-version: '3.14'
@@ -27,10 +29,11 @@ jobs:
     - run: ./bake run
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    - run: ./bake process-files
     - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
       with:
         name: generated-markdown
-        path: ./by-*.md
+        path: ./website/content/pages/by-*.md
 
   build-website:
     runs-on: 'ubuntu-latest'
@@ -44,9 +47,7 @@ jobs:
       - uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8.0.1
         with:
           name: generated-markdown
-          pattern: ./by-*.md
-
-      - run: ./bake process-files
+          pattern: ./website/content/pages/by-*.md
 
       - name: 'Setup Pages'
         id: pages
@@ -58,8 +59,32 @@ jobs:
           version='0.163.3'
           curl -sSLf -o '${{ runner.temp }}/hugo.deb' "https://github.com/gohugoio/hugo/releases/download/v${version}/hugo_extended_${version}_linux-amd64.deb"
           sudo dpkg -i '${{ runner.temp }}/hugo.deb'
-      - run: "cd ./website && hugo mod get"
-      - run: "cd ./website && hugo --minify"
+
+          # https://gohugo.io/host-and-deploy/host-on-github-pages.
+          git config --global core.quotepath false
+
+      - name: Cache restore
+        id: cache-restore
+        uses: actions/cache/restore@v5
+        with:
+          path: ${{ runner.temp }}/hugo_cache
+          key: hugo-${{ github.run_id }}
+          restore-keys: hugo-
+
+      - name: hugo build
+        run: |
+            cd ./website
+            hugo build \
+              --gc \
+              --minify \
+              --baseURL "${{ steps.pages.outputs.base_url }}/" \
+              --cacheDir "${{ runner.temp }}/hugo_cache"
+
+      - name: Cache save
+        uses: actions/cache/save@v5
+        with:
+          path: ${{ runner.temp }}/hugo_cache
+          key: ${{ steps.cache-restore.outputs.cache-primary-key }}
 
       - name: 'Upload artifact'
         uses: 'actions/upload-pages-artifact@fc324d3547104276b827a68afc52ff2a11cc49c9' # v5.0.0
