@@ -21,6 +21,8 @@ jobs:
         with:
           persist-credentials: false
 
+      - run: ./bake copy-files
+
       - name: 'Setup Ruby'
         uses: 'ruby/setup-ruby@9eb537ca036ebaed86729dcb9309076e4c5c3b74' # v1.314.0
         with:
