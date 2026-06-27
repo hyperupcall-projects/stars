@@ -11,8 +11,8 @@ task.run() {
 }
 
 task.process-files() {
-	mkdir -p ./website/content/pages
 	sed -i "s/^# Awesome Stars.*/# Edwin's GitHub Stars/" ./by-*.md
 	sed -i "s/curated list/list/" ./by-*.md
+	mkdir -p ./website/content/pages
 	cp ./by-*.md ./website/content/pages
 }
